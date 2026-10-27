@@ -1,7 +1,7 @@
 import textwrap
 import unittest
 
-from block_markdown import markdown_to_blocks, block_to_block_type, BlockType, markdown_to_html_node
+from block_markdown import markdown_to_blocks, block_to_block_type, BlockType, markdown_to_html_node, extract_title
 
 class TestBlockMarkdown(unittest.TestCase):
     def test_markdown_with_perfect_syntax(self):
@@ -124,3 +124,9 @@ the **same** even with inline stuff
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
+
+    def test_extract_header(self):
+        self.assertEqual(extract_title("# Head"), "Head")
+        self.assertEqual(extract_title("## Sub\n# Real Title  "), "Real Title")
+        with self.assertRaises(ValueError):
+            extract_title("no title here")
